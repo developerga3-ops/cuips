@@ -1,0 +1,88 @@
+.limit-height clr-datagrid {
+  height: 93vh;
+  /* El 100% del alto de la ventana del navegador */
+  width: 100vw;
+  /* El 100% del ancho de la ventana del navegador */
+}
+
+.button-container {
+  text-align: right;
+  /* Alinea el botón a la derecha */
+  max-width: 100%;
+  /* Establece el ancho máximo según tus necesidades */
+}
+
+.large-button {
+  font-size: 24px;
+  /* Ajusta el tamaño según tus preferencias */
+  padding: 10px 20px;
+  /* Ajusta el padding para aumentar el tamaño del botón en general */
+}
+
+
+/* styles.css */
+.custom-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-button i {
+  font-size: 20px;
+  /* Tamaño del icono */
+  margin-right: 5px;
+  /* Espacio entre el icono y el borde del botón */
+}
+
+.custom-button:hover {
+  background-color: #0056b3;
+}
+
+
+/* styles.css */
+.another-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.another-button i {
+  font-size: 20px;
+  /* Tamaño del icono */
+  margin-right: 5px;
+  /* Espacio entre el icono y el borde del botón */
+}
+
+.another-button:hover {
+  background-color: #0056b3;
+}
+
+
+a {
+  color: black;
+  font-weight: 500;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.has-data {
+  background-color: #89f589;
+}
+
+.no-data {
+  color: black;
+  font-weight: 500;
+  background-color: #fb9e05;
+}
+
+.expired {
+  background-color: #f94b4a;
+}

@@ -1,0 +1,316 @@
+<div class="limit-height">
+  <clr-datagrid class="datagrid-compact">
+    <clr-dg-column [clrDgField]="'num_orden'">
+      <ng-container *clrDgHideableColumn="{ hidden: false }">NUMERO DE ORDEN</ng-container></clr-dg-column>
+    <clr-dg-column [clrDgField]="'nombre'">
+      <ng-container *clrDgHideableColumn="{ hidden: false }">NOMBRE</ng-container></clr-dg-column>
+    <clr-dg-column>
+      <ng-container *clrDgHideableColumn="{ hidden: false }">APELLIDO PATERNO</ng-container></clr-dg-column>
+    <clr-dg-column>
+      <ng-container *clrDgHideableColumn="{ hidden: false }">APELLIDO MATERNO</ng-container></clr-dg-column>
+    <clr-dg-column [clrDgField]="'sucursal'">
+      <ng-container *clrDgHideableColumn="{ hidden: false }">SUCURSAL</ng-container></clr-dg-column>
+    <clr-dg-column [clrDgField]="'cliente'">
+      <ng-container *clrDgHideableColumn="{ hidden: false }">CLIENTE</ng-container></clr-dg-column>
+    <clr-dg-column [clrDgField]="'status'">
+      <ng-container *clrDgHideableColumn="{ hidden: false }">STATUS</ng-container></clr-dg-column>
+    <clr-dg-column>DESCARGAR</clr-dg-column>
+    <clr-dg-column>SELECCIONAR</clr-dg-column>
+
+    <clr-dg-column>
+      <ng-container *clrDgHideableColumn="{ hidden: false }">
+        ACTA DE NACIMIENTO
+      </ng-container>
+    </clr-dg-column>
+
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">COMPROBANTE DE
+        DOMICILIO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">COMPROBANTE DE
+        ESTUDIOS</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CONSTANCIA DE SITUACION
+        FISCAL</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CURP</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container
+        *clrDgHideableColumn="{ hidden: false }">CONTRATO_EMPRESA</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">HUELLAS</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">REGLAMENTO
+        INTERNO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CONTRATO DE
+        PRIVACIDAD</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">DC3</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">EXAMEN MEDICO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">EXAMEN
+        TOXICOLOGICO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">EXAMEN
+        SICOMETRICO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">VISITA
+        DOMICILIARIA</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CARTA DE NO ANTECEDENTES
+        PENALES</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">SOLICITUD DE
+        EMPLEO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">IDENTIFICACION
+        OFICIAL</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">ALTA IMSS</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">SEGURO
+        BENEFICIARIOS</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">ADENDUM
+        DOCUMENTO</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">BAJA IMSS</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">RETENCION
+        INFONAVIT</ng-container></clr-dg-column>
+
+    <clr-dg-placeholder>No se encontraron empleados disponibles!</clr-dg-placeholder>
+
+    <clr-dg-row *clrDgItems="let registros of Empleados" [clrDgItem]="registros">
+      <clr-dg-cell class="center-text">{{ registros.num_orden }}</clr-dg-cell>
+      <clr-dg-cell>{{ registros.nombre }}</clr-dg-cell>
+      <clr-dg-cell>{{ registros.paterno }}</clr-dg-cell>
+      <clr-dg-cell>{{ registros.materno }}</clr-dg-cell>
+      <clr-dg-cell>{{ registros.sucursal }}</clr-dg-cell>
+      <clr-dg-cell>{{ registros.cliente }}</clr-dg-cell>
+      <clr-dg-cell>{{ registros.status }}</clr-dg-cell>
+
+      <clr-dg-cell><button type="button" class="custom-button" aria-label="settings"
+          (click)="descargar(registros.num_orden)" [disabled]="descargando">
+          <i class="fas fa-download"></i></button></clr-dg-cell>
+
+      <clr-dg-cell><button type="button" class="another-button" aria-label="settings" (click)="
+            openModal(registros.num_orden, [
+              registros.act_nacimiento,
+              registros.comp_domicilio,
+              registros.comp_estudios,
+              registros.const_situacionFiscal,
+              registros.curp,
+              registros.contrato_empresa,
+              registros.huellas,
+              registros.reglamento_interno,
+              registros.contrato_privacidad,
+              registros.dc3,
+              registros.examen_medico,
+              registros.examen_toxicologico,
+              registros.examen_sicometrico,
+              registros.visita_domiciliaria,
+              registros.carta_antecedentes,
+              registros.solicitud_empleo,
+              registros.identificacion_oficial,
+              registros.alta_imss,
+              registros.seguro_beneficiarios,
+              registros.adendum_documentos,
+              registros.baja_imss,
+              registros.retencion_infonavit
+            ])
+          ">
+          <i class="fa-sharp fa-solid fa-list-check"></i></button></clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.act_nacimiento,
+          'no-data': !registros.act_nacimiento
+        }">
+        <a *ngIf="registros.act_nacimiento" [href]="getVerURL(registros.act_nacimiento)" target="_blank">VER</a>{{
+        !registros.act_nacimiento ? "NO EXISTE" : "" }}
+      </clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.comp_domicilio,
+          'no-data': !registros.comp_domicilio
+        }">
+        <a *ngIf="registros.comp_domicilio" [href]="getVerURL(registros.comp_domicilio)" target="_blank">VER</a>
+        {{ !registros.comp_domicilio ? "NO EXISTE" : "" }}
+      </clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.comp_estudios,
+          'no-data': !registros.comp_estudios
+        }">
+        <a *ngIf="registros.comp_estudios" [href]="getVerURL(registros.comp_estudios)" target="_blank">VER</a>
+        {{ !registros.comp_estudios ? "NO EXISTE" : "" }}
+      </clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.const_situacionFiscal,
+          'no-data': !registros.const_situacionFiscal
+        }">
+        <a *ngIf="registros.const_situacionFiscal" [href]="getVerURL(registros.const_situacionFiscal)"
+          target="_blank">VER</a>
+        {{ !registros.const_situacionFiscal ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.curp,
+          'no-data': !registros.curp
+        }">
+        <a *ngIf="registros.curp" [href]="getVerURL(registros.curp)" target="_blank">VER</a>{{
+        !registros.curp
+        ? "NO
+        EXISTE"
+        : ""
+        }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.contrato_empresa,
+          'no-data': !registros.contrato_empresa
+        }">
+        <a *ngIf="registros.contrato_empresa" [href]="getVerURL(registros.contrato_empresa)" target="_blank">VER</a>{{
+        !registros.contrato_empresa ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.huellas,
+          'no-data': !registros.huellas
+        }">
+        <a *ngIf="registros.huellas" [href]="getVerURL(registros.huellas)" target="_blank">VER</a>{{ !registros.huellas
+        ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.reglamento_interno,
+          'no-data': !registros.reglamento_interno
+        }">
+        <a *ngIf="registros.reglamento_interno" [href]="getVerURL(registros.reglamento_interno)"
+          target="_blank">VER</a>{{ !registros.reglamento_interno ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.contrato_privacidad,
+          'no-data': !registros.contrato_privacidad
+        }">
+        <a *ngIf="registros.contrato_privacidad" [href]="getVerURL(registros.contrato_privacidad)"
+          target="_blank">VER</a>{{ !registros.contrato_privacidad ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.dc3,
+          'no-data': !registros.dc3
+        }">
+        <a *ngIf="registros.dc3" [href]="getVerURL(registros.dc3)" target="_blank">VER</a>{{
+        !registros.dc3
+        ? "NO
+        EXISTE"
+        : ""
+        }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.examen_medico,
+          'no-data': !registros.examen_medico,
+          expired: fechaexpira >= registros.expireDate_medico
+        }">
+        <a *ngIf="registros.examen_medico" [href]="getVerURL(registros.examen_medico)" target="_blank">VER</a>{{
+        !registros.examen_medico ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.examen_toxicologico,
+          'no-data': !registros.examen_toxicologico,
+          expired: fechaexpira >= registros.expireDate_toxicologico
+        }">
+        <a *ngIf="registros.examen_toxicologico" [href]="getVerURL(registros.examen_toxicologico)"
+          target="_blank">VER</a>{{ !registros.examen_toxicologico ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.examen_sicometrico,
+          'no-data': !registros.examen_sicometrico,
+          expired: fechaexpira >= registros.expireDate_sicometrico
+        }">
+        <a *ngIf="registros.examen_sicometrico" [href]="getVerURL(registros.examen_sicometrico)"
+          target="_blank">VER</a>{{ !registros.examen_sicometrico ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.visita_domiciliaria,
+          'no-data': !registros.visita_domiciliaria,
+          expired: fechaexpira >= registros.expireDate_visitaDomi
+        }">
+        <a *ngIf="registros.visita_domiciliaria" [href]="getVerURL(registros.visita_domiciliaria)"
+          target="_blank">VER</a>{{ !registros.visita_domiciliaria ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.carta_antecedentes,
+          'no-data': !registros.carta_antecedentes,
+          expired: fechaexpira >= registros.expireDate_cartaAntecedentes
+        }">
+        <a *ngIf="registros.carta_antecedentes" [href]="getVerURL(registros.carta_antecedentes)"
+          target="_blank">VER</a>{{ !registros.carta_antecedentes ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.solicitud_empleo,
+          'no-data': !registros.solicitud_empleo
+        }">
+        <a *ngIf="registros.solicitud_empleo" [href]="getVerURL(registros.solicitud_empleo)" target="_blank">VER</a>{{
+        !registros.solicitud_empleo ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.identificacion_oficial,
+          'no-data': !registros.identificacion_oficial
+        }">
+        <a *ngIf="registros.identificacion_oficial" [href]="getVerURL(registros.identificacion_oficial)"
+          target="_blank">VER</a>{{ !registros.identificacion_oficial ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.alta_imss,
+          'no-data': !registros.alta_imss
+        }">
+        <a *ngIf="registros.alta_imss" [href]="getVerURL(registros.alta_imss)" target="_blank">VER</a>{{
+        !registros.alta_imss ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.seguro_beneficiarios,
+          'no-data': !registros.seguro_beneficiarios
+        }">
+        <a *ngIf="registros.seguro_beneficiarios" [href]="getVerURL(registros.seguro_beneficiarios)"
+          target="_blank">VER</a>{{ !registros.seguro_beneficiarios ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.adendum_documentos,
+          'no-data': !registros.adendum_documentos
+        }">
+        <a *ngIf="registros.adendum_documentos" [href]="getVerURL(registros.adendum_documentos)"
+          target="_blank">VER</a>{{ !registros.adendum_documentos ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.baja_imss,
+          'no-data': !registros.baja_imss
+        }">
+        <a *ngIf="registros.baja_imss" [href]="getVerURL(registros.baja_imss)" target="_blank">VER</a>{{
+        !registros.baja_imss ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.retencion_infonavit,
+          'no-data': !registros.retencion_infonavit
+        }">
+        <a *ngIf="registros.retencion_infonavit" [href]="getVerURL(registros.retencion_infonavit)"
+          target="_blank">VER</a>{{ !registros.retencion_infonavit ? "NO EXISTE" : "" }}</clr-dg-cell>
+    </clr-dg-row>
+    <clr-dg-footer>
+      <clr-dg-pagination #pagination [clrDgPageSize]="15">
+        <clr-dg-page-size [clrPageSizeOptions]="[15, 30, 45, 100, 1000, 1500]">- USUARIOS POR PAGINA</clr-dg-page-size>
+        {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} DE
+        {{ pagination.totalItems }} USUARIOS
+      </clr-dg-pagination>
+    </clr-dg-footer>
+  </clr-datagrid>
+</div>
+
+<clr-modal [(clrModalOpen)]="opened" [clrModalSize]="'lg'" [clrModalStaticBackdrop]="false">
+  <h3 class="modal-title">DESCARGAR DOCUMENTOS - {{ selectedNumOrden }}</h3>
+  <div class="modal-body">
+    <p>Selecciona los documentos que deseas descargar en un solo PDF<br /></p>
+    <ul>
+      <ng-container *ngFor="let documento of documentosEmpleado; let i = index">
+        <style>
+          .no-bullet {
+            list-style-type: none;
+          }
+        </style>
+        <li class="no-bullet" *ngIf="documento">
+          <input type="checkbox" id="cbox{{ i }}" [value]="getFileNameFromPath(documento)"
+            (change)="updateSelectedValues(i)" />
+          <label for="cbox{{ i }}"><b> {{ getFileNameFromPath2(documento) }}</b></label>
+        </li>
+      </ng-container>
+      <li *ngIf="!documentosEmpleado || documentosEmpleado.length == 0">
+        No hay documentos disponibles.
+      </li>
+    </ul>
+
+    <div class="button-container">
+      <button type="button" class="btn btn-success-outline" aria-label="settings"
+        (click)="descargarDocumentos(selectedNumOrden)" [disabled]="descargando">
+        <div><i class="fas fa-download"></i><label>Descargar</label></div>
+      </button>
+    </div>
+  </div>
+</clr-modal>

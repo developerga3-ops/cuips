@@ -1,0 +1,878 @@
+<clr-modal [(clrModalOpen)]="opened" [clrModalSize]="'lg'" [clrModalStaticBackdrop]="false">
+  <h3 class="modal-title">INDICACIONES</h3>
+  <div class="modal-body">
+    <p>
+      Para que usted logre un proceso satisfactorio en el guardado de
+      documentos, es necesario que en cada apartado que selecciona un documento
+      presione el botón 'SUBIR'. Esto con la finalidad de almacenar el archivo
+      correctamente, en caso de que no se realice así e intente subir todos los
+      archivos a la vez, se cargara solamente el último archivo.
+    </p>
+  </div>
+</clr-modal>
+
+<div class="contenedor">
+  <form clrForm clrLayout="horizontal" clrLabelSize="8" (ngSubmit)="FindEmployee()">
+    <div class="center">
+      <h2>DATOS DEL EMPLEADO</h2>
+      <p>
+        FECHA: <label>{{ fecha | date : "dd/MM/yyyy" }}</label>
+      </p>
+    </div>
+    <hr class="solid" />
+    <clr-input-container>
+      <label class="clr-col-md-2">NUMERO DE ORDEN:</label>
+      <input class="clr-col-md-2" clrInput type="text" required maxlength="9" [(ngModel)]="empleado_id_"
+        name="empleado_id_" autocomplete="off" />
+      <clr-control-error>ESTE CAMPO ES REQUERIDO*</clr-control-error> </clr-input-container><br />
+    <button class="btn btn-success-outline center-button" type="submit">
+      BUSCAR EMPLEADO
+    </button>
+    <div class="clr-row">
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <p>NOMBRE</p>
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <p>PATERNO</p>
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <p>MATERNO</p>
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <p>SUCURSAL</p>
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-4">
+        <p>CLIENTE</p>
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <input class="clr-col-md-12" type="text" [value]="nombre" disabled />
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <input class="clr-col-md-12" type="text" [value]="apellidoPaterno" disabled />
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <input class="clr-col-md-12" type="text" [value]="apellidoMaterno" disabled />
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-2">
+        <input class="clr-col-md-12" type="text" [value]="sucursal" disabled />
+      </div>
+      <div class="clr-col-sm-12 clr-col-md-4">
+        <input class="clr-col-md-12" type="text" [value]="cliente" disabled />
+      </div>
+    </div>
+    <div class="center">
+      <h2>DOCUMENTOS</h2>
+    </div>
+    <hr class="solid" />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">ACTA DE NACIMIENTO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert1">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc1($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera()" *ngIf="cameraOpen1">
+                Cambiar Cámara
+              </button>
+
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen1" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto()" *ngIf="cameraOpen1">
+                Tomar Foto
+              </button>
+              <img [src]="photoData1" width="100%" *ngIf="photoData1" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">COMPROBANTE DE DOMICILIO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert2">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc2($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera2()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera2()" *ngIf="cameraOpen2">
+                Cambiar Cámara
+              </button>
+
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen2" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto2()" *ngIf="cameraOpen2">
+                Tomar Foto
+              </button>
+              <img [src]="photoData2" width="100%" *ngIf="photoData2" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">COMPROBANTE DE ESTUDIOS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert3">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc3($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera3()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera3()" *ngIf="cameraOpen3">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen3" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto3()" *ngIf="cameraOpen3">
+                Tomar Foto
+              </button>
+              <img [src]="photoData3" width="100%" *ngIf="photoData3" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">CONSTANCIA DE SITUACION FISCAL</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert4">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc4($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera4()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera4()" *ngIf="cameraOpen4">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen4" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto4()" *ngIf="cameraOpen4">
+                Tomar Foto
+              </button>
+              <img [src]="photoData4" width="100%" *ngIf="photoData4" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">CURP</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert5">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc5($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera5()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera5()" *ngIf="cameraOpen5">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen5" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto5()" *ngIf="cameraOpen5">
+                Tomar Foto
+              </button>
+              <img [src]="photoData5" width="100%" *ngIf="photoData5" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">CONTRATO (GRUPO AGUILAS)</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert7">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc7($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera7()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera7()" *ngIf="cameraOpen7">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen7" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto7()" *ngIf="cameraOpen7">
+                Tomar Foto
+              </button>
+              <div *ngIf="photos.length > 0">
+                <h4>Fotos Capturadas:</h4>
+                <div *ngFor="let photo of photos; let i = index">
+                  <img [src]="photo" width="100%" alt="Foto {{i + 1}}" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <br /><br />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">HUELLAS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert8">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc8($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera8()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera8()" *ngIf="cameraOpen8">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen8" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto8()" *ngIf="cameraOpen8">
+                Tomar Foto
+              </button>
+              <img [src]="photoData8" width="100%" *ngIf="photoData8" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">REGLAMENTO INTERNO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert9">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc9($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera9()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera9()" *ngIf="cameraOpen9">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen9" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto9()" *ngIf="cameraOpen9">
+                Tomar Foto
+              </button>
+              <div *ngIf="photos9.length > 0">
+                <h4>Fotos Capturadas:</h4>
+                <div *ngFor="let photo of photos9; let i = index">
+                  <img [src]="photo" width="100%" alt="Foto {{i + 1}}" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">CONTRATO DE PRIVACIDAD</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert10">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc10($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera10()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera10()" *ngIf="cameraOpen10">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen10" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto10()" *ngIf="cameraOpen10">
+                Tomar Foto
+              </button>
+              <img [src]="photoData10" width="100%" *ngIf="photoData10" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">DC3</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert11">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc11($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera11()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera11()" *ngIf="cameraOpen11">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen11" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto11()" *ngIf="cameraOpen11">
+                Tomar Foto
+              </button>
+              <img [src]="photoData11" width="100%" *ngIf="photoData11" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">EXAMEN MEDICO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert12">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc12($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera12()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera12()" *ngIf="cameraOpen12">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen12" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto12()" *ngIf="cameraOpen12">
+                Tomar Foto
+              </button>
+              <div *ngIf="photos12.length > 0">
+                <h4>Fotos Capturadas:</h4>
+                <div *ngFor="let photo of photos12; let i = index">
+                  <img [src]="photo" width="100%" alt="Foto {{i + 1}}" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">EXAMEN TOXICOLOGICO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert13">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc13($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera13()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera13()" *ngIf="cameraOpen13">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen13" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto13()" *ngIf="cameraOpen13">
+                Tomar Foto
+              </button>
+              <img [src]="photoData13" width="100%" *ngIf="photoData13" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">EXAMEN PSICOMETRICO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert14">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc14($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera14()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera14()" *ngIf="cameraOpen14">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen14" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto14()" *ngIf="cameraOpen14">
+                Tomar Foto
+              </button>
+              <img [src]="photoData14" width="100%" *ngIf="photoData14" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">VISITA DOMICILIARIA</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert15">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc15($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera15()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera15()" *ngIf="cameraOpen15">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen15" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto15()" *ngIf="cameraOpen15">
+                Tomar Foto
+              </button>
+              <img [src]="photoData15" width="100%" *ngIf="photoData15" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">CARTA DE NO ANTECEDENTES PENALES</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert16">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc16($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera16()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera16()" *ngIf="cameraOpen16">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen16" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto16()" *ngIf="cameraOpen16">
+                Tomar Foto
+              </button>
+              <img [src]="photoData16" width="100%" *ngIf="photoData16" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">SOLICITUD DE EMPLEO</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert17">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc17($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera17()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera17()" *ngIf="cameraOpen17">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen17" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto17()" *ngIf="cameraOpen17">
+                Tomar Foto
+              </button>
+              <img [src]="photoData17" width="100%" *ngIf="photoData17" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">IDENTIFICACION OFICIAL</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert18">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc18($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera18()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera18()" *ngIf="cameraOpen18">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen18" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto18()" *ngIf="cameraOpen18">
+                Tomar Foto
+              </button>
+              <img [src]="photoData18" width="100%" *ngIf="photoData18" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">ALTA DE IMSS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert19">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc19($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera19()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera19()" *ngIf="cameraOpen19">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen19" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto19()" *ngIf="cameraOpen19">
+                Tomar Foto
+              </button>
+              <img [src]="photoData19" width="100%" *ngIf="photoData19" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br /><br />
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">SEGURO DE BENEFICIARIOS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert20">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc20($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera20()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera20()" *ngIf="cameraOpen20">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen20" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto20()" *ngIf="cameraOpen20">
+                Tomar Foto
+              </button>
+              <img [src]="photoData20" width="100%" *ngIf="photoData20" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">ADENDUM DOCUMENTOS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert21">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc21($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera21()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera21()" *ngIf="cameraOpen21">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen21" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto21()" *ngIf="cameraOpen21">
+                Tomar Foto
+              </button>
+              <img [src]="photoData21" width="100%" *ngIf="photoData21" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">BAJA DE IMSS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert22">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc22($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera22()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera22()" *ngIf="cameraOpen22">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen22" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto22()" *ngIf="cameraOpen22">
+                Tomar Foto
+              </button>
+              <img [src]="photoData22" width="100%" *ngIf="photoData22" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">RETENCION INFONAVIT</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert23">
+                <clr-alert-item>
+                  <span class="alert-text">
+                    Se ha subido correctamente el archivo!
+                  </span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc23($event)">
+                SUBIR
+              </button>
+              <button class="btn btn-success-outline" (click)="openCamera23()">
+                Abrir Cámara
+              </button>
+              <button class="btn btn-success-outline" (click)="toggleCamera23()" *ngIf="cameraOpen23">
+                Cambiar Cámara
+              </button>
+              <video padding-top="10px" width="100%" *ngIf="cameraOpen23" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto23()" *ngIf="cameraOpen23">
+                Tomar Foto
+              </button>
+              <img [src]="photoData23" width="100%" *ngIf="photoData23" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="solid" />
+    <button class="btn btn-info-outline center-button" (click)="salir()">
+      GUARDAR DATOS
+    </button>
+  </form>
+</div>

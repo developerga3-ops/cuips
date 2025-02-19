@@ -1,0 +1,67 @@
+* {
+  font-size: 16PX;
+}
+
+input {
+  font-size: 16PX;
+  text-align: center;
+}
+
+
+.clr-row {
+  text-align: center;
+}
+
+.contenedor {
+  padding: 10px;
+}
+
+.clr-row {
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  align-items: center;
+  text-align: center;
+}
+
+.card {
+  border: 1px solid #ccc;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin: 10px;
+  background-color: #ffffff;
+}
+
+/* Estilos para el encabezado de la tarjeta */
+.card-header {
+  background-color: #858d98;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 10px;
+}
+
+/* Estilos para el contenido de la tarjeta */
+.card-block {
+  padding: 10px;
+}
+
+/* Estilos para el pie de la tarjeta */
+.card-footer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.center-button {
+  display: block;
+  margin: 0 auto;
+}
+
+.btn-info-outline {
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
