@@ -30,8 +30,8 @@
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CONSTANCIA DE SITUACION
         FISCAL</ng-container></clr-dg-column>
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CURP</ng-container></clr-dg-column>
-    <clr-dg-column><ng-container
-        *clrDgHideableColumn="{ hidden: false }">CONTRATO_EMPRESA</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CONTRATO
+        EMPRESA</ng-container></clr-dg-column>
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">HUELLAS</ng-container></clr-dg-column>
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">REGLAMENTO
         INTERNO</ng-container></clr-dg-column>
@@ -51,6 +51,8 @@
         EMPLEO</ng-container></clr-dg-column>
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">IDENTIFICACION
         OFICIAL</ng-container></clr-dg-column>
+    <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">CONSTANCIA
+        IMSS</ng-container></clr-dg-column>
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">ALTA IMSS</ng-container></clr-dg-column>
     <clr-dg-column><ng-container *clrDgHideableColumn="{ hidden: false }">SEGURO
         BENEFICIARIOS</ng-container></clr-dg-column>
@@ -238,6 +240,13 @@
         }">
         <a *ngIf="registros.identificacion_oficial" [href]="getVerURL(registros.identificacion_oficial)"
           target="_blank">VER</a>{{ !registros.identificacion_oficial ? "NO EXISTE" : "" }}</clr-dg-cell>
+
+      <clr-dg-cell class="center-text" [ngClass]="{
+          'has-data': registros.constancia_imss,
+          'no-data': !registros.constancia_imss
+        }">
+        <a *ngIf="registros.constancia_imss" [href]="getVerURL(registros.constancia_imss)" target="_blank">VER</a>{{
+        !registros.constancia_imss ? "NO EXISTE" : "" }}</clr-dg-cell>
 
       <clr-dg-cell class="center-text" [ngClass]="{
           'has-data': registros.alta_imss,

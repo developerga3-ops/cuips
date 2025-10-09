@@ -112,6 +112,12 @@
                   </span>
                 </clr-alert-item>
               </clr-alert>
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="examDate">Fecha del examen</label>
+                <input id="examDate" name="examDate" type="date" class="form-control" [(ngModel)]="examDate2" />
+              </div>
+
               <div class="card-text">
                 <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
               </div>
@@ -447,24 +453,27 @@
                   </span>
                 </clr-alert-item>
               </clr-alert>
+
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="examDate">Fecha del examen</label>
+                <input id="examDate" name="examDate" type="date" class="form-control" [(ngModel)]="examDate12"
+                  (change)="onDateChange12($event)" />
+              </div>
+
+              <!-- Archivo -->
               <div class="card-text">
                 <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
               </div>
             </div>
+
             <div class="card-footer">
-              <button class="btn btn-success-outline" (click)="doc12($event)">
-                SUBIR
-              </button>
-              <button class="btn btn-success-outline" (click)="openCamera12()">
-                Abrir Cámara
-              </button>
-              <button class="btn btn-success-outline" (click)="toggleCamera12()" *ngIf="cameraOpen12">
-                Cambiar Cámara
-              </button>
+              <button class="btn btn-success-outline" (click)="doc12($event)">SUBIR</button>
+              <button class="btn btn-success-outline" (click)="openCamera12()">Abrir Cámara</button>
+              <button class="btn btn-success-outline" (click)="toggleCamera12()" *ngIf="cameraOpen12">Cambiar
+                Cámara</button>
               <video padding-top="10px" width="100%" *ngIf="cameraOpen12" #videoElement autoplay></video>
-              <button class="btn btn-success-outline" (click)="takePhoto12()" *ngIf="cameraOpen12">
-                Tomar Foto
-              </button>
+              <button class="btn btn-success-outline" (click)="takePhoto12()" *ngIf="cameraOpen12">Tomar Foto</button>
               <div *ngIf="photos12.length > 0">
                 <h4>Fotos Capturadas:</h4>
                 <div *ngFor="let photo of photos12; let i = index">
@@ -474,6 +483,7 @@
             </div>
           </div>
         </div>
+
 
         <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
           <div class="card">
@@ -486,6 +496,14 @@
                   </span>
                 </clr-alert-item>
               </clr-alert>
+
+
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="examDate">Fecha del examen</label>
+                <input id="examDate" name="examDate" type="date" class="form-control" [(ngModel)]="examDate13" />
+              </div>
+
               <div class="card-text">
                 <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
               </div>
@@ -525,6 +543,12 @@
                   </span>
                 </clr-alert-item>
               </clr-alert>
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="examDate">Fecha del examen</label>
+                <input id="examDate" name="examDate" type="date" class="form-control" [(ngModel)]="examDate14" />
+              </div>
+
               <div class="card-text">
                 <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
               </div>
@@ -559,6 +583,12 @@
                   </span>
                 </clr-alert-item>
               </clr-alert>
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="examDate">Fecha del examen</label>
+                <input id="examDate" name="examDate" type="date" class="form-control" [(ngModel)]="examDate15" />
+              </div>
+
               <div class="card-text">
                 <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
               </div>
@@ -593,6 +623,12 @@
                   </span>
                 </clr-alert-item>
               </clr-alert>
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="examDate">Fecha del examen</label>
+                <input id="examDate" name="examDate" type="date" class="form-control" [(ngModel)]="examDate16" />
+              </div>
+
               <div class="card-text">
                 <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
               </div>
@@ -832,17 +868,17 @@
         </div>
       </div>
     </div>
+
     <div class="cards">
       <div class="clr-row">
-        <div class="clr-col-lg-4 clr-col-md-8 clr-col-12">
+        <!-- Card 1 -->
+        <div class="clr-col-lg-4 clr-col-md-6 clr-col-12">
           <div class="card">
-            <h3 class="card-header">RETENCION INFONAVIT</h3>
+            <h3 class="card-header">RETENCIÓN INFONAVIT</h3>
             <div class="card-block">
               <clr-alert [clrAlertType]="'success'" *ngIf="showAlert23">
                 <clr-alert-item>
-                  <span class="alert-text">
-                    Se ha subido correctamente el archivo!
-                  </span>
+                  <span class="alert-text">Se ha subido correctamente el archivo!</span>
                 </clr-alert-item>
               </clr-alert>
               <div class="card-text">
@@ -850,26 +886,51 @@
               </div>
             </div>
             <div class="card-footer">
-              <button class="btn btn-success-outline" (click)="doc23($event)">
-                SUBIR
-              </button>
-              <button class="btn btn-success-outline" (click)="openCamera23()">
-                Abrir Cámara
-              </button>
-              <button class="btn btn-success-outline" (click)="toggleCamera23()" *ngIf="cameraOpen23">
-                Cambiar Cámara
-              </button>
-              <video padding-top="10px" width="100%" *ngIf="cameraOpen23" #videoElement autoplay></video>
-              <button class="btn btn-success-outline" (click)="takePhoto23()" *ngIf="cameraOpen23">
-                Tomar Foto
-              </button>
+              <button class="btn btn-success-outline" (click)="doc23($event)">SUBIR</button>
+              <button class="btn btn-success-outline" (click)="openCamera23()">Abrir Cámara</button>
+              <button class="btn btn-success-outline" (click)="toggleCamera23()" *ngIf="cameraOpen23">Cambiar
+                Cámara</button>
+              <video width="100%" *ngIf="cameraOpen23" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto23()" *ngIf="cameraOpen23">Tomar Foto</button>
               <img [src]="photoData23" width="100%" *ngIf="photoData23" alt="Vista previa de la foto"
                 class="mirror-image" />
             </div>
           </div>
         </div>
+
+        <!-- Card 2 -->
+        <div class="clr-col-lg-4 clr-col-md-6 clr-col-12">
+          <div class="card">
+            <h3 class="card-header">CONSTANCIA DE DERECHOHABIENTE DEL IMSS</h3>
+            <div class="card-block">
+              <clr-alert [clrAlertType]="'success'" *ngIf="showAlert24">
+                <clr-alert-item>
+                  <span class="alert-text">Se ha subido correctamente el archivo!</span>
+                </clr-alert-item>
+              </clr-alert>
+              <div class="card-text">
+                <input type="file" id="formFile" name="formFile" accept=".pdf" (change)="onFileSelected($event)" />
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-success-outline" (click)="doc24($event)">SUBIR</button>
+              <button class="btn btn-success-outline" (click)="openCamera24()">Abrir Cámara</button>
+              <button class="btn btn-success-outline" (click)="toggleCamera24()" *ngIf="cameraOpen24">Cambiar
+                Cámara</button>
+              <video width="100%" *ngIf="cameraOpen24" #videoElement autoplay></video>
+              <button class="btn btn-success-outline" (click)="takePhoto24()" *ngIf="cameraOpen24">Tomar Foto</button>
+              <img [src]="photoData24" width="100%" *ngIf="photoData24" alt="Vista previa de la foto"
+                class="mirror-image" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Espacio vacío para respetar layout de 3 columnas -->
+        <div class="clr-col-lg-4 clr-col-md-6 clr-col-12"></div>
       </div>
     </div>
+
+
     <hr class="solid" />
     <button class="btn btn-info-outline center-button" (click)="salir()">
       GUARDAR DATOS

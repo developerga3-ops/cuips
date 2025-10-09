@@ -1,0 +1,242 @@
+h5 span {
+    color: #343f78;
+    font-weight: bold;
+}
+
+/* Grid de cards */
+.cuips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 350px;
+  border-radius: 30px;
+  overflow: hidden;
+  perspective: 1000px;
+  margin: 0;
+}
+svg {
+  background: transparent;
+}
+
+
+.card-inner {
+  width: 100%;
+  height: 500px; 
+  position: relative;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+
+.card-front, .card-back {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; 
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  overflow-y: auto; 
+  scrollbar-width: thin;        
+  scrollbar-color: #343f78 #f0f0f0;
+}
+
+
+.card-text span {
+  font-weight: bold;
+  color: #343f78;
+}
+
+
+
+.btn-cuip {
+  background-color: transparent;
+  color: #343f78;
+  border: 2px solid #343f78;
+  border-radius: 25px;
+  padding: 8px 20px;
+  font-weight: bold;
+  transition: 0.3s ease;
+  width: 100%;
+  max-width: 180px;
+  cursor: pointer;
+}
+
+.btn-cuip:hover {
+  background-color: #343f78;
+  transform: scale(1.05);
+  color: #fff;
+}
+
+.btn-cuip:active {
+  transform: scale(0.97);
+  background-color: #2a3463;
+}
+
+
+.card-back table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  display: block;
+  max-height: 250px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  margin-top: 10px;
+}
+
+.card-back thead, .card-back tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.card-back th, .card-back td {
+  padding: 8px;
+  text-align: left;
+}
+
+.card-back input[type="checkbox"] {
+  transform: scale(1.2);
+  display: block;
+  margin: 0 auto;
+}
+
+.card-back table::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-back table::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+
+.documentos-list {
+  width: 100%;
+}
+
+.documentos-list .summary {
+  cursor: pointer;
+  font-weight: bold;
+  border-bottom: 1px solid #343f78 ;
+  padding: 12px;
+  color: #343f78;
+  margin-bottom: 10px;
+
+}
+
+
+
+/* Table Wrapper */
+
+.table-wrapper {
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+}
+
+.table-wrapper[style*="max-height: 250px"] {
+  opacity: 1;
+}
+
+
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  scrollbar-width: thin;
+}
+
+.table-wrapper th, .table-wrapper td {
+  padding: 8px;
+  text-align: left;
+}
+
+.table-wrapper th {
+  background-color: #343f78;
+  color: #fff;
+}
+
+.table-wrapper input[type="checkbox"] {
+  transform: scale(1.2);
+  display: block;
+  margin: 0 auto;
+}
+
+
+.table-wrapper::-webkit-scrollbar {
+  width: 6px;
+ 
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+.summary i {
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.summary i.rotated {
+  transform: rotate(180deg);
+}
+
+/* Anillo de avance */ 
+.image-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;   
+  justify-content: center;
+
+
+}
+
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff; 
+
+}
+
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;  
+  height: 100%;
+  transform: rotate(-90deg); 
+}
+
+.progress-ring__background {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 10;
+}

@@ -1,0 +1,116 @@
+<div class="container py-5">
+  <h1 class="mb-4 text-center">CUIPS</h1>
+
+  <div class="cuips-grid">
+    <div class="card shadow-sm" *ngFor="let cuip of cuips">
+      <div class="card-inner" [class.is-flipped]="cuip.flipped">
+
+
+        <div class="card-front card-body text-center">
+          <div class="image-wrapper">
+            <svg class="progress-ring" viewBox="0 0 150 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+
+              <g transform="rotate(-90 75 75)">
+                <circle class="progress-ring__background" cx="75" cy="75" r="70" stroke-width="10" fill="none" />
+                <circle class="progress-ring__progress" cx="75" cy="75" r="70" stroke-width="10"
+                  [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="getStrokeOffset(cuip)"
+                  [attr.stroke]="getStrokeColor(cuip)" stroke-linecap="round">
+
+                </circle>
+              </g>
+
+
+              <text x="75" y="82" text-anchor="middle" font-size="14">
+                {{ getCompletion(cuip) | number:'1.0-0' }}%
+              </text>
+            </svg>
+
+
+
+
+            <img [src]="cuip.imagen" class="profile-img" alt="{{ cuip.nombre }}">
+          </div>
+
+
+
+          <h5 class="card-title mt-2">{{ cuip.nombre }}</h5>
+          <p class="card-text"><span>Numero Orden:</span> {{ cuip.numerOrden }}</p>
+          <p class="card-text"><span>Planta:</span> {{ cuip.planta }}</p>
+          <p class="card-text"><span>Sucursal:</span> {{ cuip.sucursal }}</p>
+          <p class="card-text"><span>Puesto: </span>{{ cuip.puesto }}</p>
+          <p class="card-text"><span>Turno: </span>{{ cuip.turno }}</p>
+
+          <button class="btn-cuip" (click)="toggleFlip(cuip)">
+            {{ cuip.botonTexto }}
+          </button>
+        </div>
+
+        <!-- Reverso de la Card -->
+        <div class="card-back card-body text-center">
+          <h5>Documentos de <span>{{ cuip.nombre }}</span></h5>
+
+          <!-- Lista desplegable  -->
+          <div class="documentos-list mt-3">
+            <p class="summary" (click)="cuip.showDocsDigitales = !cuip.showDocsDigitales">
+              {{ cuip.showDocsDigitales ? 'Ocultar documentos' : 'Documentos Digitales' }}
+              <i class="fa-solid fa-chevron-down" [class.rotated]="cuip.showDocsDigitales"></i>
+            </p>
+
+
+            <div class="table-wrapper" [style.maxHeight]="cuip.showDocsDigitales ? '250px' : '0'">
+              <table class="table table-bordered table-striped mt-2">
+                <thead>
+                  <tr>
+                    <th>Documento</th>
+                    <th>Descripción</th>
+                    <th>Entregado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let doc of cuip.documentosDigitales">
+                    <td>{{ doc.nombre }}</td>
+                    <td>{{ doc.descripcion }}</td>
+                    <td class="text-center">
+                      <input type="checkbox" [(ngModel)]="doc.entregado">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="documentos-list mt-3">
+            <p class="summary" (click)="cuip.showDocsFisicos = !cuip.showDocsFisicos">
+              {{ cuip.showDocsFisicos ? 'Ocultar documentos' : 'Documentos Físicos' }}
+              <i class="fa-solid fa-chevron-down" [class.rotated]="cuip.showDocsFisicos"></i>
+            </p>
+
+
+            <div class="table-wrapper" [style.maxHeight]="cuip.showDocsFisicos ? '250px' : '0'">
+              <table class="table table-bordered table-striped mt-2">
+                <thead>
+                  <tr>
+                    <th>Documento</th>
+                    <th>Descripción</th>
+                    <th>Entregado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let doc of cuip.documentosFisicos">
+                    <td>{{ doc.nombre }}</td>
+                    <td>{{ doc.descripcion }}</td>
+                    <td class="text-center">
+                      <input type="checkbox" [(ngModel)]="doc.entregado">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <button class="btn-cuip mt-2" (click)="toggleFlip(cuip)">Volver</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

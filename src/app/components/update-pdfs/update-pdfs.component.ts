@@ -21,6 +21,7 @@ export class UpdatePDFSComponent {
 
   photoData2: string | undefined;
   cameraOpen2 = false;
+  examDate2: string | null = null;
 
   photoData3: string | undefined;
   cameraOpen3 = false;
@@ -48,18 +49,23 @@ export class UpdatePDFSComponent {
 
   photoData12: string | undefined;
   cameraOpen12 = false;
+  examDate12: string | null = null;
 
   photoData13: string | undefined;
   cameraOpen13 = false;
+  examDate13: string | null = null;
 
   photoData14: string | undefined;
   cameraOpen14 = false;
+  examDate14: string | null = null;
 
   photoData15: string | undefined;
   cameraOpen15 = false;
+  examDate15: string | null = null;
 
   photoData16: string | undefined;
   cameraOpen16 = false;
+  examDate16: string | null = null;
 
   photoData17: string | undefined;
   cameraOpen17 = false;
@@ -81,6 +87,9 @@ export class UpdatePDFSComponent {
 
   photoData23: string | undefined;
   cameraOpen23 = false;
+
+  photoData24: string | undefined;
+  cameraOpen24 = false;
 
   photoData: string | undefined;
   cameraOpen = false;
@@ -107,6 +116,7 @@ export class UpdatePDFSComponent {
   isFrontCamera21 = false;
   isFrontCamera22 = false;
   isFrontCamera23 = false;
+  isFrontCamera24 = false;
 
   videoStream: MediaStream | undefined;
 
@@ -146,6 +156,7 @@ export class UpdatePDFSComponent {
   showAlert21: boolean = false;
   showAlert22: boolean = false;
   showAlert23: boolean = false;
+  showAlert24: boolean = false;
 
   async openCamera() {
     this.cameraOpen1 = true;
@@ -1053,6 +1064,10 @@ export class UpdatePDFSComponent {
     } else {
       throw new Error('No se pudo capturar la foto.');
     }
+  }
+
+  onDateChange12(e: Event) {
+    console.log('fecha:', this.examDate12);
   }
 
   async openCamera13() {
@@ -1979,6 +1994,90 @@ export class UpdatePDFSComponent {
     }
   }
 
+  async openCamera24() {
+    this.cameraOpen24 = true;
+    try {
+      const constraints = {
+        video: {
+          facingMode: this.isFrontCamera23 ? 'user' : 'environment', // Cambiar entre 'user' y 'environment' para alternar cámaras
+        },
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const video: HTMLVideoElement = this.videoElement.nativeElement;
+      video.srcObject = stream;
+      this.videoStream = stream;
+
+      // Ajusta el estilo de transformación para que no sea en modo espejo
+      video.style.transform = this.isFrontCamera3 ? 'scaleX(-1)' : 'none';
+    } catch (error) {
+      console.error('Error al acceder a la cámara:', error);
+    }
+  }
+
+  async toggleCamera24() {
+    // Cambiar entre las cámaras frontal y trasera
+    this.isFrontCamera24 = !this.isFrontCamera24;
+
+    // Si la cámara está abierta, actualiza la configuración
+    if (this.cameraOpen24) {
+      const video: HTMLVideoElement = this.videoElement.nativeElement;
+      const constraints = {
+        video: {
+          facingMode: this.isFrontCamera24 ? 'user' : 'environment',
+        },
+      };
+
+      // Detén la transmisión de video actual
+      if (this.videoStream) {
+        this.videoStream.getTracks().forEach((track) => track.stop());
+      }
+
+      // Vuelve a abrir la cámara con la nueva configuración
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        this.videoStream = stream;
+
+        // Ajusta el estilo de transformación para que no sea en modo espejo
+        video.style.transform = this.isFrontCamera24 ? 'scaleX(-1)' : 'none';
+      } catch (error) {
+        console.error('Error al cambiar la cámara:', error);
+      }
+    }
+  }
+
+  async takePhoto24() {
+    const video: HTMLVideoElement = this.videoElement.nativeElement;
+
+    // Captura una foto del video
+    const photo = await this.capturePhoto3(video);
+
+    // Muestra la foto en la vista previa
+    this.photoData24 = photo;
+
+    // Detén la transmisión de video (apaga la cámara)
+    if (this.videoStream) {
+      this.videoStream.getTracks().forEach((track) => track.stop());
+      this.cameraOpen24 = false;
+    }
+  }
+
+  async capturePhoto24(video: HTMLVideoElement): Promise<string> {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const photoDataUrl = canvas.toDataURL('image/jpeg'); // Puedes cambiar el formato según tus necesidades
+
+      return photoDataUrl;
+    } else {
+      throw new Error('No se pudo capturar la foto.');
+    }
+  }
+
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
@@ -2111,6 +2210,19 @@ export class UpdatePDFSComponent {
   doc2(event: Event) {
     event.preventDefault();
 
+    // Validar fecha (acepta Date o string)
+    const validation = this.validateFecha(this.examDate2);
+    if (!validation.valid || !validation.date) {
+      alert(validation.message);
+      return;
+    }
+
+    const fechaValida = validation.date;
+    // Formato YYYY-MM-DD
+    const fechaISO = fechaValida.toISOString().slice(0, 10);
+
+
+    console.log('Fecha válida en formato ISO:', fechaISO);
     // Verificar si se ha seleccionado un archivo PDF o se ha tomado una foto
     if (this.selectedFile) {
       this.selectedFile;
@@ -2121,6 +2233,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
+        currentDate_domicilio: fechaISO,
         identificador: 2,
       };
       console.log(datosNuevos);
@@ -2155,6 +2268,7 @@ export class UpdatePDFSComponent {
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
         identificador: 2,
+        currentDate_domicilio: fechaISO,
         imagen: this.photoData2,
       };
 
@@ -2830,7 +2944,21 @@ export class UpdatePDFSComponent {
   doc12(event: Event) {
     event.preventDefault();
 
-    // Verificar si se ha seleccionado un archivo PDF
+    // Validar fecha (acepta Date o string)
+    const validation = this.validateFecha(this.examDate12);
+    if (!validation.valid || !validation.date) {
+      alert(validation.message);
+      return;
+    }
+
+    const fechaValida = validation.date;
+    // Formato YYYY-MM-DD
+    const fechaISO = fechaValida.toISOString().slice(0, 10);
+
+
+    console.log('Fecha válida en formato ISO:', fechaISO);
+
+    // Si se ha seleccionado un archivo PDF
     if (this.selectedFile) {
       const datosNuevos = {
         employee_id_: this.empleado_id_,
@@ -2839,14 +2967,14 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
-        currentDate_medico: this.fecha.toISOString().slice(0, 10),
+        currentDate_medico: fechaISO,
         identificador: 12,
       };
 
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('payload', JSON.stringify(datosNuevos));
-
+      console.log(JSON.stringify(datosNuevos));
       this.http
         .post<any>(
           'https://acorp-it.com/scripts/API_DockiEagle/upload_AC.php',
@@ -2862,6 +2990,8 @@ export class UpdatePDFSComponent {
             alert('Hubo un error al subir el PDF. Por favor, inténtelo de nuevo.');
           }
         );
+
+      // Si hay fotos tomadas en lugar de archivo
     } else if (this.photos12.length > 0) {
       this.stopCamera12();
       const datosNuevos = {
@@ -2871,7 +3001,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
-        currentDate_medico: this.fecha.toISOString().slice(0, 10),
+        currentDate_medico: fechaISO,
         identificador: 12,
         imagenes: this.photos12,
       };
@@ -2894,10 +3024,13 @@ export class UpdatePDFSComponent {
             alert('Hubo un error al subir las fotos. Por favor, inténtelo de nuevo.');
           }
         );
+
     } else {
       alert('Por favor, seleccione un archivo PDF o tome una foto antes de subirlo.');
     }
   }
+
+
 
   stopCamera12() {
     // Detener la transmisión de video actual
@@ -2910,6 +3043,20 @@ export class UpdatePDFSComponent {
   doc13(event: Event) {
     event.preventDefault();
 
+    // Validar fecha (acepta Date o string)
+    const validation = this.validateFecha(this.examDate13);
+    if (!validation.valid || !validation.date) {
+      alert(validation.message);
+      return;
+    }
+
+    const fechaValida = validation.date;
+    // Formato YYYY-MM-DD
+    const fechaISO = fechaValida.toISOString().slice(0, 10);
+
+
+    console.log('Fecha válida en formato ISO:', fechaISO);
+
     // Verificar si se ha seleccionado un archivo PDF o se ha tomado una foto
     if (this.selectedFile) {
       this.selectedFile;
@@ -2921,7 +3068,7 @@ export class UpdatePDFSComponent {
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
 
-        currentDate_toxicologico: this.fecha.toISOString().slice(0, 10),
+        currentDate_toxicologico: fechaISO,
         identificador: 13,
       };
       console.log(datosNuevos);
@@ -2955,7 +3102,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
 
-        currentDate_toxicologico: this.fecha.toISOString().slice(0, 10),
+        currentDate_toxicologico: fechaISO,
         base_location_name_: this.cliente,
         identificador: 13,
         imagen: this.photoData13,
@@ -2993,6 +3140,20 @@ export class UpdatePDFSComponent {
   doc14(event: Event) {
     event.preventDefault();
 
+    // Validar fecha (acepta Date o string)
+    const validation = this.validateFecha(this.examDate14);
+    if (!validation.valid || !validation.date) {
+      alert(validation.message);
+      return;
+    }
+
+    const fechaValida = validation.date;
+    // Formato YYYY-MM-DD
+    const fechaISO = fechaValida.toISOString().slice(0, 10);
+
+
+    console.log('Fecha válida en formato ISO:', fechaISO);
+
     // Verificar si se ha seleccionado un archivo PDF o se ha tomado una foto
     if (this.selectedFile) {
       this.selectedFile;
@@ -3003,7 +3164,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
-        currentDate_sicometrico: this.fecha.toISOString().slice(0, 10),
+        currentDate_sicometrico: fechaISO,
         identificador: 14,
       };
       console.log(datosNuevos);
@@ -3037,7 +3198,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
-        currentDate_sicometrico: this.fecha.toISOString().slice(0, 10),
+        currentDate_sicometrico: fechaISO,
         identificador: 14,
         imagen: this.photoData14,
       };
@@ -3074,6 +3235,20 @@ export class UpdatePDFSComponent {
   doc15(event: Event) {
     event.preventDefault();
 
+    // Validar fecha (acepta Date o string)
+    const validation = this.validateFecha(this.examDate15);
+    if (!validation.valid || !validation.date) {
+      alert(validation.message);
+      return;
+    }
+
+    const fechaValida = validation.date;
+    // Formato YYYY-MM-DD
+    const fechaISO = fechaValida.toISOString().slice(0, 10);
+
+
+    console.log('Fecha válida en formato ISO:', fechaISO);
+
     // Verificar si se ha seleccionado un archivo PDF o se ha tomado una foto
     if (this.selectedFile) {
       this.selectedFile;
@@ -3085,7 +3260,7 @@ export class UpdatePDFSComponent {
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
 
-        currentDate_visitaDomi: this.fecha.toISOString().slice(0, 10),
+        currentDate_visitaDomi: fechaISO,
         identificador: 15,
       };
       console.log(datosNuevos);
@@ -3120,7 +3295,7 @@ export class UpdatePDFSComponent {
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
         identificador: 15,
-        currentDate_visitaDomi: this.fecha.toISOString().slice(0, 10),
+        currentDate_visitaDomi: fechaISO,
         imagen: this.photoData15,
       };
 
@@ -3156,6 +3331,20 @@ export class UpdatePDFSComponent {
   doc16(event: Event) {
     event.preventDefault();
 
+    // Validar fecha (acepta Date o string)
+    const validation = this.validateFecha(this.examDate16);
+    if (!validation.valid || !validation.date) {
+      alert(validation.message);
+      return;
+    }
+
+    const fechaValida = validation.date;
+    // Formato YYYY-MM-DD
+    const fechaISO = fechaValida.toISOString().slice(0, 10);
+
+
+    console.log('Fecha válida en formato ISO:', fechaISO);
+
     // Verificar si se ha seleccionado un archivo PDF o se ha tomado una foto
     if (this.selectedFile) {
       this.selectedFile;
@@ -3166,7 +3355,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
 
-        currentDate_cartaAntecedentes: this.fecha.toISOString().slice(0, 10),
+        currentDate_cartaAntecedentes: fechaISO,
         base_location_name_: this.cliente,
         identificador: 16,
       };
@@ -3201,7 +3390,7 @@ export class UpdatePDFSComponent {
         employee_second_last_name_: this.apellidoMaterno,
         cost_center_name_: this.sucursal,
         base_location_name_: this.cliente,
-        currentDate_cartaAntecedentes: this.fecha.toISOString().slice(0, 10),
+        currentDate_cartaAntecedentes: fechaISO,
         identificador: 16,
         imagen: this.photoData16,
       };
@@ -3786,5 +3975,118 @@ export class UpdatePDFSComponent {
         'Por favor, seleccione un archivo PDF o tome una foto antes de subirlo.'
       );
     }
+  }
+
+
+  doc24(event: Event) {
+    event.preventDefault();
+
+    // Verificar si se ha seleccionado un archivo PDF o se ha tomado una foto
+    if (this.selectedFile) {
+      this.selectedFile;
+      const datosNuevos = {
+        employee_id_: this.empleado_id_,
+        employee_name_: this.nombre,
+        employee_last_name_: this.apellidoPaterno,
+        employee_second_last_name_: this.apellidoMaterno,
+        cost_center_name_: this.sucursal,
+        base_location_name_: this.cliente,
+        identificador: 24,
+      };
+      console.log(datosNuevos);
+
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      formData.append('payload', JSON.stringify(datosNuevos));
+
+      this.http
+        .post<any>(
+          'https://acorp-it.com/scripts/API_DockiEagle/upload_AC.php',
+          formData
+        )
+        .subscribe(
+          (Response) => {
+            console.log('PDF subido con éxito', Response);
+            this.showAlert24 = true;
+          },
+          (error) => {
+            console.error('Error al subir el PDF', error);
+            alert(
+              'Hubo un error al subir el PDF. Por favor, inténtelo de nuevo.'
+            );
+          }
+        );
+    } else if (this.photoData24) {
+      const datosNuevos = {
+        employee_id_: this.empleado_id_,
+        employee_name_: this.nombre,
+        employee_last_name_: this.apellidoPaterno,
+        employee_second_last_name_: this.apellidoMaterno,
+        cost_center_name_: this.sucursal,
+        base_location_name_: this.cliente,
+        identificador: 24,
+        imagen: this.photoData24,
+      };
+
+      const formData = new FormData();
+      formData.append('file', this.photoData24);
+      formData.append('payload', JSON.stringify(datosNuevos));
+
+      console.log(this.photoData24);
+      this.http
+        .post<any>(
+          'https://acorp-it.com/scripts/API_DockiEagle/upload_AC_img.php',
+          formData
+        )
+        .subscribe(
+          (Response) => {
+            console.log('PDF subido con éxito', Response);
+            this.showAlert24 = true;
+          },
+          (error) => {
+            console.error('Error al subir la foto', error);
+            alert(
+              'Hubo un error al subir la foto. Por favor, inténtelo de nuevo.'
+            );
+          }
+        );
+    } else {
+      alert(
+        'Por favor, seleccione un archivo PDF o tome una foto antes de subirlo.'
+      );
+    }
+  }
+
+  private validateFecha(fechaInput: any): { valid: boolean; message?: string; date?: Date } {
+    if (fechaInput === null || fechaInput === undefined || fechaInput === '') {
+      return { valid: false, message: 'Por favor, ingrese la fecha del documento.' };
+    }
+
+    // Convertir a Date si viene como string
+    const date = fechaInput instanceof Date ? fechaInput : new Date(fechaInput);
+
+    // Validar que sea una fecha válida
+    if (isNaN(date.getTime())) {
+      return { valid: false, message: 'La fecha ingresada no es válida. Usa el formato correcto.' };
+    }
+
+    // Normalizar horas para comparar solo la fecha (sin hora)
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaComparar = new Date(date.getTime());
+    fechaComparar.setHours(0, 0, 0, 0);
+
+    // No permitir fechas en el futuro
+    if (fechaComparar > hoy) {
+      return { valid: false, message: 'La fecha del examen no puede ser posterior al día de hoy.' };
+    }
+
+    // Si necesitas una regla adicional, por ejemplo
+    // no permitir fechas con más de X años de antigüedad, la puedes añadir aquí:
+    // const yearsBackAllowed = 5;
+    // const limitePasado = new Date(hoy.getFullYear() - yearsBackAllowed, hoy.getMonth(), hoy.getDate());
+    // if (fechaComparar < limitePasado) return { valid: false, message: `La fecha no puede ser anterior a ${yearsBackAllowed} años.` };
+
+    return { valid: true, date };
   }
 }
