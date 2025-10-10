@@ -12,15 +12,19 @@ import { TableDocsComponent } from './components/table-docs/table-docs.component
 import { UpdatePDFSComponent } from './components/update-pdfs/update-pdfs.component';
 import { ClrCheckboxModule } from '@clr/angular';
 
+
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { PopupComponent } from './popup/popup.component';
+import { CuipsComponent } from './components/cuips/cuips.component';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     TableDocsComponent,
     UpdatePDFSComponent,
-    PopupComponent
+    PopupComponent,
+    CuipsComponent,
+
   ],
   imports: [
     BrowserModule,

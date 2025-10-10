@@ -15,6 +15,10 @@ export class SharedService {
     'https://acorp-it.com/scripts/API_DockiEagle/getEmpleadosSucursal.php?sucursal=';
   private API_postDescargar =
     'https://acorp-it.com/scripts/API_DockiEagle/descargarPDF.php';
+  private API_Documentos = 
+    'https://acorp-it.com/scripts/API_DockiEagle/getDocumentos.php';
+
+
 
   private baseUrl = 'https://acorp-it.com/scripts/API_DockiEagle/pruebas.php';
   private baseUrl2 = 'https://acorp-it.com/scripts/API_DockiEagle/pruebas2.php';
@@ -36,6 +40,10 @@ export class SharedService {
     return this.http.post(this.API_postDescargar, jsonData);
   }
 
+  public GetDocumentos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_Documentos}`);
+  }
+
   descargarPDF(numeroEmpleado: number): Observable<any[]> {
     const url = `${this.baseUrl}?numero_empleado=${numeroEmpleado}`;
     return this.http.get<any[]>(url);
@@ -48,4 +56,5 @@ export class SharedService {
     const url = `${this.baseUrl2}?seleccion=${seleccion}&numero_empleado=${numeroEmpleado}`;
     return this.http.get<any[]>(url);
   }
+
 }
