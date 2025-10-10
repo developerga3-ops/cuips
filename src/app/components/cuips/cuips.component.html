@@ -1,6 +1,8 @@
 <div class="container py-5">
   <h1 class="mb-4 text-center">CUIPS</h1>
 
+  
+
   <div class="cuips-grid">
     <div class="card shadow-sm" *ngFor="let cuip of cuips">
       <div class="card-inner" [class.is-flipped]="cuip.flipped">
@@ -39,6 +41,7 @@
           <p class="card-text"><span>Sucursal:</span> {{ cuip.sucursal }}</p>
           <p class="card-text"><span>Puesto: </span>{{ cuip.puesto }}</p>
           <p class="card-text"><span>Turno: </span>{{ cuip.turno }}</p>
+          <p class="card-text"><span>Estado CUIP: </span>{{cuip.estadoCuip}}</p>
 
           <button class="btn-cuip" (click)="toggleFlip(cuip)">
             {{ cuip.botonTexto }}
