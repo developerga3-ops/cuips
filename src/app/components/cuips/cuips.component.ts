@@ -58,25 +58,29 @@ export class CuipsComponent implements OnInit {
           flipped: false,
           showDocsFisicos: false,
           showDocsDigitales: false,
+
+          // DIGITALES
           documentosDigitales: [
-            { nombre: 'Acta de Nacimiento', descripcion: 'Documento oficial', entregado: !!item.act_nacimiento },
-            { nombre: 'CURP', descripcion: 'Clave Única de Registro', entregado: !!item.curp },
-            { nombre: 'Comprobante Domicilio', descripcion: 'Recibo de luz o agua', entregado: !!item.comp_domicilio },
-            { nombre: 'INE', descripcion: 'Identificación oficial', entregado: !!item.identificacion_oficial },
-            { nombre: 'Constancia de Situación Fiscal', descripcion: 'SAT', entregado: !!item.const_situacionFiscal },
-            { nombre: 'Examen Médico', descripcion: 'Aptitud laboral', entregado: !!item.examen_medico },
-            { nombre: 'Examen Psicométrico', descripcion: 'Valoración psicológica', entregado: !!item.examen_sicometrico },
-            { nombre: 'Examen Toxicológico', descripcion: 'Control antidoping', entregado: !!item.examen_toxicologico },
-            { nombre: 'Carta de Antecedentes', descripcion: 'No penales', entregado: !!item.carta_antecedentes }
+            { nombre: 'Acta de Nacimiento', descripcion: 'Documento oficial', entregado: this.isDocumentoDigital(item.act_nacimiento)},
+            { nombre: 'CURP', descripcion: 'Clave Única de Registro', entregado:this.isDocumentoDigital(item.curp)},
+            { nombre: 'Comprobante Domicilio', descripcion: 'Recibo de luz o agua', entregado: this.isDocumentoDigital(item.comp_domicilio)},
+            { nombre: 'INE', descripcion: 'Identificación oficial', entregado: this.isDocumentoDigital(item.identificacion_oficial)},
+            { nombre: 'Constancia de Situación Fiscal', descripcion: 'SAT', entregado:this.isDocumentoDigital(item.const_situacionFiscal)},
+            { nombre: 'Examen Médico', descripcion: 'Aptitud laboral', entregado: this.isDocumentoDigital(item.examen_medico)},
+            { nombre: 'Examen Psicométrico', descripcion: 'Valoración psicológica', entregado: this.isDocumentoDigital(item.examen_sicometrico)},
+            { nombre: 'Examen Toxicológico', descripcion: 'Control antidoping', entregado: this.isDocumentoDigital(item.examen_toxicologico)},
+            { nombre: 'Carta de Antecedentes', descripcion: 'No penales', entregado: this.isDocumentoDigital(item.carta_antecedentes) }
           ],
+
+          // FÍSICOS
           documentosFisicos: [
-            { nombre: 'Contrato Empresa', descripcion: 'Firmado', entregado: !!item.contrato_empresa },
-            { nombre: 'Contrato Privacidad', descripcion: 'Aviso firmado', entregado: !!item.contrato_privacidad },
-            { nombre: 'Adendum Documentos', descripcion: 'Extras', entregado: !!item.adendum_documentos },
+            { nombre: 'Contrato Empresa', descripcion: 'Firmado', entregado: !!item.contrato_empresa, vigente: this.isDocumentoVigente(item.currentDate_) },
+            { nombre: 'Contrato Privacidad', descripcion: 'Aviso firmado', entregado: !!item.contrato_privacidad, vigente: this.isDocumentoVigente(item.currentDate_) },
+            { nombre: 'Adendum Documentos', descripcion: 'Extras', entregado: !!item.adendum_documentos, vigente: this.isDocumentoVigente(item.currentDate_) },
             { nombre: 'DC3', descripcion: 'Capacitación', entregado: !!item.dc3 },
-            { nombre: 'Seguro Beneficiarios', descripcion: 'Póliza', entregado: !!item.seguro_beneficiarios },
-            { nombre: 'Reglamento Interno', descripcion: 'Firmado', entregado: !!item.reglamento_interno },
-            { nombre: 'Solicitud Empleo', descripcion: 'Formato RH', entregado: !!item.solicitud_empleo }
+            { nombre: 'Seguro Beneficiarios', descripcion: 'Póliza', entregado: !!item.seguro_beneficiarios, vigente: this.isDocumentoVigente(item.currentDate_) },
+            { nombre: 'Reglamento Interno', descripcion: 'Firmado', entregado: !!item.reglamento_interno, vigente: this.isDocumentoVigente(item.currentDate_) },
+            { nombre: 'Solicitud Empleo', descripcion: 'Formato RH', entregado: !!item.solicitud_empleo, vigente: this.isDocumentoVigente(item.currentDate_) }
           ]
         }
 
@@ -124,4 +128,23 @@ export class CuipsComponent implements OnInit {
 
     return `rgb(${r},${g},${b})`;
   }
+
+  isDocumentoVigente (fechaStr: string | null): boolean {
+  if (!fechaStr) return false
+  
+  const fechaDoc = new Date(fechaStr);
+  const hoy = new Date();
+
+  const diffMeses = (hoy.getFullYear() - fechaDoc.getFullYear()) * 12 + (hoy.getMonth() - fechaDoc.getMonth());
+  
+  return diffMeses < 6;
 }
+
+  isDocumentoDigital (link: string | null): boolean {
+    if (!link) return false;
+     return /\.pdf$/i.test(link.trim());
+  }
+
+}
+
+
