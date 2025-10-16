@@ -1,119 +1,209 @@
-<div class="container py-5">
-  <h1 class="mb-4 text-center">CUIPS</h1>
+<div class="container py-4">
 
-  
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h4 class="sidebar-title">Filtros</h4>
 
-  <div class="cuips-grid">
-    <div class="card shadow-sm" *ngFor="let cuip of cuips">
-      <div class="card-inner" [class.is-flipped]="cuip.flipped">
-
-
-        <div class="card-front card-body text-center">
-          <div class="image-wrapper">
-            <svg class="progress-ring" viewBox="0 0 150 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-
-              <g transform="rotate(-90 75 75)">
-                <circle class="progress-ring__background" cx="75" cy="75" r="70" stroke-width="10" fill="none" />
-                <circle class="progress-ring__progress" cx="75" cy="75" r="70" stroke-width="10"
-                  [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="getStrokeOffset(cuip)"
-                  [attr.stroke]="getStrokeColor(cuip)" stroke-linecap="round">
-
-                </circle>
-              </g>
-
-
-              <text x="75" y="82" text-anchor="middle" font-size="14">
-                {{ getCompletion(cuip) | number:'1.0-0' }}%
-              </text>
-            </svg>
-
-
-
-
-            <img [src]="cuip.imagen" class="profile-img" alt="{{ cuip.nombre }}">
-          </div>
-
-
-
-          <h5 class="card-title mt-2">{{ cuip.nombre }}</h5>
-          <p class="card-text"><span>Numero Orden:</span> {{ cuip.numerOrden }}</p>
-          <p class="card-text"><span>Planta:</span> {{ cuip.planta }}</p>
-          <p class="card-text"><span>Sucursal:</span> {{ cuip.sucursal }}</p>
-          <p class="card-text"><span>Puesto: </span>{{ cuip.puesto }}</p>
-          <p class="card-text"><span>Turno: </span>{{ cuip.turno }}</p>
-          <p class="card-text"><span>Estado CUIP: </span>{{cuip.estadoCuip}}</p>
-
-          <button class="btn-cuip" (click)="toggleFlip(cuip)">
-            {{ cuip.botonTexto }}
-          </button>
-        </div>
-
-        <!-- Reverso de la Card -->
-        <div class="card-back card-body text-center">
-          <h5>Documentos de <span>{{ cuip.nombre }}</span></h5>
-
-          <!-- Lista desplegable  -->
-          <div class="documentos-list mt-3">
-            <p class="summary" (click)="cuip.showDocsDigitales = !cuip.showDocsDigitales">
-              {{ cuip.showDocsDigitales ? 'Ocultar documentos' : 'Documentos Digitales' }}
-              <i class="fa-solid fa-chevron-down" [class.rotated]="cuip.showDocsDigitales"></i>
-            </p>
-
-
-            <div class="table-wrapper" [style.maxHeight]="cuip.showDocsDigitales ? '250px' : '0'">
-              <table class="table table-bordered table-striped mt-2">
-                <thead>
-                  <tr>
-                    <th>Documento</th>
-                    <th>Descripción</th>
-                    <th>Entregado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let doc of cuip.documentosDigitales">
-                    <td>{{ doc.nombre }}</td>
-                    <td>{{ doc.descripcion }}</td>
-                    <td class="text-center">
-                      <input type="checkbox" [(ngModel)]="doc.entregado">
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="documentos-list mt-3">
-            <p class="summary" (click)="cuip.showDocsFisicos = !cuip.showDocsFisicos">
-              {{ cuip.showDocsFisicos ? 'Ocultar documentos' : 'Documentos Físicos' }}
-              <i class="fa-solid fa-chevron-down" [class.rotated]="cuip.showDocsFisicos"></i>
-            </p>
-
-
-            <div class="table-wrapper" [style.maxHeight]="cuip.showDocsFisicos ? '250px' : '0'">
-              <table class="table table-bordered table-striped mt-2">
-                <thead>
-                  <tr>
-                    <th>Documento</th>
-                    <th>Descripción</th>
-                    <th>Entregado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let doc of cuip.documentosFisicos">
-                    <td>{{ doc.nombre }}</td>
-                    <td>{{ doc.descripcion }}</td>
-                    <td class="text-center">
-                      <input type="checkbox" [(ngModel)]="doc.entregado">
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <button class="btn-cuip mt-2" (click)="toggleFlip(cuip)">Volver</button>
-        </div>
-
+      <!-- Expedientes -->
+      <div class="filter-group">
+        <h5><i class="fas fa-folder"></i> Expedientes</h5>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'documentosIncompletos'"
+                (click)="filtroSeleccionado='documentosIncompletos'; aplicarFiltro()">
+          <i class="fas fa-folder-minus"></i> Documentos incompletos
+        </button>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'documentosListos'"
+                (click)="filtroSeleccionado='documentosListos'; aplicarFiltro()">
+          <i class="fas fa-folder-check"></i> Expediente completo
+        </button>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'autorizados'"
+                (click)="filtroSeleccionado='autorizados'; aplicarFiltro()">
+          <i class="fas fa-check-circle"></i> Autorizados
+        </button>
       </div>
+
+      <!-- CUIP -->
+      <div class="filter-group">
+        <h5><i class="fas fa-graduation-cap"></i> CUIP</h5>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'cursoCompleto'"
+                (click)="filtroSeleccionado='cursoCompleto'; aplicarFiltro()">
+          <i class="fas fa-book"></i> Curso completo
+        </button>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'cuipRecibida'"
+                (click)="filtroSeleccionado='cuipRecibida'; aplicarFiltro()">
+          <i class="fas fa-id-badge"></i> CUIP recibida
+        </button>
+      </div>
+
+      <!-- Ubicación -->
+      <hr />
+      <h5 class="subtitulo"><i class="fas fa-building"></i> Ubicación</h5>
+      <div class="filter-selects">
+        <label>Planta</label>
+        <select [(ngModel)]="plantaSeleccionada" (change)="aplicarFiltro()">
+          <option value="">Todas</option>
+          <option *ngFor="let planta of plantas" [value]="planta">{{ planta }}</option>
+        </select>
+
+        <label>Sucursal</label>
+        <select [(ngModel)]="sucursalSeleccionada" (change)="aplicarFiltro()">
+          <option value="">Todas</option>
+          <option *ngFor="let sucursal of sucursales" [value]="sucursal">{{ sucursal }}</option>
+        </select>
+
+        <label>Puesto</label>
+        <select [(ngModel)]="puestoSeleccionado" (change)="aplicarFiltro()">
+          <option value="">Todos</option>
+          <option *ngFor="let puesto of puestos" [value]="puesto">{{ puesto }}</option>
+        </select>
+      </div>
+
+      <!-- Otros -->
+      <div class="filter-group">
+        <h5><i class="fas fa-flask"></i> Otros</h5>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'examenPendiente'"
+                (click)="filtroSeleccionado='examenPendiente'; aplicarFiltro()">
+          <i class="fas fa-vial"></i> Con examen pendiente
+        </button>
+        <button class="btn-filtro"
+                [class.active]="filtroSeleccionado === 'porRenovarCUIP'"
+                (click)="filtroSeleccionado='porRenovarCUIP'; aplicarFiltro()">
+          <i class="fas fa-sync-alt"></i> Por renovar CUIP
+        </button>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="content">
+
+      <!-- Buscador -->
+      <div class="buscador-container mb-3">
+        <div class="buscador-wrapper">
+          <input 
+            type="text" 
+            class="form-control buscador" 
+            placeholder="Buscar por número de orden..." 
+            [(ngModel)]="busquedaOrden"
+            (input)="aplicarFiltro()" />
+          <i class="fas fa-search search-icon"></i>
+        </div>
+      </div>
+
+     
+<!-- Contenedor etapas leyenda -->
+<div class="leyenda-colores-wrapper">
+  <div class="leyenda-titulo">Etapas</div>
+  <div class="leyenda-colores d-flex gap-2 flex-wrap">
+    <span *ngFor="let etapa of etapas" class="leyenda-item d-flex align-items-center gap-1">
+      <span class="color-box" [style.backgroundColor]="etapa.color"></span>
+      {{ etapa.nombre }}
+    </span>
+  </div>
+</div>
+
+
+
+
+      <!-- Grid de CUIPS -->
+      <div class="cuips-grid">
+        <div class="card shadow-sm" *ngFor="let cuip of cuips">
+          <div class="card-inner" [class.is-flipped]="cuip.flipped">
+
+            <!-- Lado frontal -->
+            <div class="card-front card-body text-center">
+              <div class="image-wrapper">
+                <svg class="progress-ring" viewBox="0 0 150 150" preserveAspectRatio="xMidYMid meet"
+                     [attr.title]="getEtapaTexto(cuip)">
+                  <g transform="rotate(-90 75 75)">
+                    <circle class="progress-ring__background" cx="75" cy="75" r="70" stroke-width="10" fill="none" />
+                    <circle class="progress-ring__progress"
+                            cx="75" cy="75" r="70" stroke-width="10"
+                            [attr.stroke-dasharray]="circumference"
+                            [attr.stroke-dashoffset]="getStrokeOffset(cuip)"
+                            [attr.stroke]="getStrokeColor(cuip)"
+                            stroke-linecap="round">
+                    </circle>
+                  </g>
+                  <text x="75" y="82" text-anchor="middle" font-size="14">
+                    {{ getCompletion(cuip) }}%
+                  </text>
+                </svg>
+
+                <img [src]="cuip.imagen" class="profile-img" alt="{{ cuip.nombre }}" (error)="onImageError($event)" />
+              </div>
+
+              <h5 class="card-title mt-2">{{ cuip.nombre }}</h5>
+              <p class="card-text"><span>Número Orden:</span> {{ cuip.numerOrden }}</p>
+              <p class="card-text"><span>Planta:</span> {{ cuip.planta }}</p>
+              <p class="card-text"><span>Sucursal:</span> {{ cuip.sucursal }}</p>
+              <p class="card-text"><span>Puesto:</span> {{ cuip.puesto }}</p>
+              <p class="card-text"><span>Turno:</span> {{ cuip.turno }}</p>
+              <p class="card-text"><span>Estado CUIP:</span> {{ cuip.estadoCuip }}</p>
+
+              <button class="btn-cuip" (click)="toggleFlip(cuip)">
+                {{ cuip.botonTexto }}
+              </button>
+            </div>
+
+            <!-- Lado trasero -->
+            <div class="card-back card-body text-center">
+              <h5>Documentos de <span>{{ cuip.nombre }}</span></h5>
+
+              <div class="documentos-list mt-3">
+                <p class="summary" (click)="cuip.showDocsDigitales = !cuip.showDocsDigitales">
+                  {{ cuip.showDocsDigitales ? 'Ocultar documentos' : 'Documentos Digitales' }}
+                  <i class="fa-solid fa-chevron-down" [class.rotated]="cuip.showDocsDigitales"></i>
+                </p>
+
+                <!-- Tabla de documentos -->
+                <div class="table-wrapper" [class.show]="cuip.showDocsDigitales">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Documento</th>
+                        <th>Descripción</th>
+                        <th>Entregado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let doc of cuip.documentosDigitales" [class.faltante]="!doc.entregado">
+                        <td>{{ doc.nombre }}</td>
+                        <td>{{ doc.descripcion }}</td>
+                        <td>
+                          <span [ngClass]="{'text-success': doc.entregado, 'text-danger': !doc.entregado}">
+                            {{ doc.entregado ? 'Sí' : 'No' }}
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+
+              <div *ngIf="hasAllRequiredDocuments(cuip) && cuip.preparacion_cuip_status !== 1" class="mt-2">
+  <button class="btn btn-success d-flex align-items-center justify-content-center gap-2" (click)="marcarPreparacionCUIP(cuip)">
+    <i class="fas fa-check"></i> Autorizar
+  </button>
+</div>
+
+              <div *ngIf="cuip.preparacion_cuip_status === 1" class="mt-2 text-success">
+                Preparación CUIP marcada ✔
+              </div>
+
+              <button class="btn-cuip mt-2" (click)="toggleFlip(cuip)">Volver</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
