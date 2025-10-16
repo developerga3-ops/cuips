@@ -2,6 +2,37 @@ import { Component, OnInit } from '@angular/core';
 import { SharedService } from 'src/app/services/shared.service';
 import Swal from 'sweetalert2';
 
+interface Documento {
+  nombre: string;
+  descripcion: string;
+  entregado: boolean;
+}
+
+interface Cuip {
+  nombre: string;
+  numerOrden: string | number;
+  planta: string;
+  sucursal: string;
+  imagen: string;
+  puesto: string;
+  turno: string;
+  estadoCuip: string;
+  fechaIngreso?: string;
+  fecha_examen_cuip?: string;
+  cuip_url?: string;
+  examen_cuip_status?: number;
+  botonTexto: string;
+  botonClase: string;
+  flipped: boolean;
+  showDocsDigitales: boolean;
+  documentosDigitales: Documento[];
+  preparacion_cuip_status: number;
+  examen_cuip?: number;
+  folio_cuip?: number;
+  cursoCuip?: boolean | string;
+  autorizado?: boolean;
+}
+
 @Component({
   selector: 'app-cuips',
   templateUrl: './cuips.component.html',
@@ -11,13 +42,12 @@ export class CuipsComponent implements OnInit {
   radius = 70;
   circumference = 2 * Math.PI * this.radius;
 
-  cuips: any[] = [];
-  cuips2: any[] = [];
+  cuips: Cuip[] = [];
+  cuips2: Cuip[] = [];
 
   filtroSeleccionado: string = 'todos';
   busquedaOrden: string = '';
 
-  // 🔹 Nuevas propiedades para filtros adicionales
   plantas: string[] = [];
   sucursales: string[] = [];
   puestos: string[] = [];
@@ -25,23 +55,32 @@ export class CuipsComponent implements OnInit {
   sucursalSeleccionada: string = '';
   puestoSeleccionado: string = '';
 
+  // Leyenda de colores actualizada según flujo
+  etapas = [
+    { nombre: 'Nada', color: 'lightgray' },
+    { nombre: 'Documentos incompletos', color: 'rgb(220,53,69)' },
+    { nombre: 'Expediente completo', color: 'rgb(255,165,0)' },
+    { nombre: 'Autorizados', color: 'rgb(255,255,0)' },
+    { nombre: 'Curso completo', color: 'rgb(40,187,69)' },
+    { nombre: 'CUIP recibida', color: 'rgb(0,123,255)' },
+  ];
+
   constructor(private SharedService: SharedService) { }
 
   ngOnInit(): void {
     this.SharedService.GetDocumentos().subscribe((data: any[]) => {
-      this.cuips2 = data.map((item: any) => this.crearTarjetaCuip(item));
-      console.log('Datos crudos desde backend:', this.cuips2);
+      this.cuips2 = data.map(item => this.crearTarjetaCuip(item));
 
-      // 🔹 Extraer listas únicas de planta, sucursal y puesto
-      this.plantas = [...new Set(this.cuips2.map((c: any) => c.planta).filter(Boolean))];
-      this.sucursales = [...new Set(this.cuips2.map((c: any) => c.sucursal).filter(Boolean))];
-      this.puestos = [...new Set(this.cuips2.map((c: any) => c.puesto).filter(Boolean))];
+      // Extraer listas únicas de planta, sucursal y puesto
+      this.plantas = [...new Set(this.cuips2.map(c => c.planta).filter(Boolean))];
+      this.sucursales = [...new Set(this.cuips2.map(c => c.sucursal).filter(Boolean))];
+      this.puestos = [...new Set(this.cuips2.map(c => c.puesto).filter(Boolean))];
 
       this.aplicarFiltro();
     });
   }
 
-  crearTarjetaCuip(item: any): any {
+  crearTarjetaCuip(item: any): Cuip {
     const hoy = new Date();
     const fechaIngreso = item.entry_date_ ? new Date(item.entry_date_) : null;
     let mesesAntiguedad = 0;
@@ -74,11 +113,12 @@ export class CuipsComponent implements OnInit {
       fecha_examen_cuip: item.fecha_examen_cuip,
       cuip_url: item.cuip_url,
       examen_cuip_status: item.examen_cuip_status,
+      examen_cuip: item.examen_cuip,
+      folio_cuip: item.folio_cuip,
       botonTexto: 'Ver más',
       botonClase: 'btn-primary',
       flipped: false,
       showDocsDigitales: false,
-
       documentosDigitales: [
         { nombre: 'Acta de Nacimiento', descripcion: 'Documento oficial', entregado: this.isDocumentoDigital(item.act_nacimiento) },
         { nombre: 'CURP', descripcion: 'Clave Única de Registro', entregado: this.isDocumentoDigital(item.curp) },
@@ -88,118 +128,146 @@ export class CuipsComponent implements OnInit {
         { nombre: 'Examen Toxicológico', descripcion: 'Control antidoping', entregado: this.isDocumentoDigital(item.examen_toxicologico) },
         { nombre: 'Carta de Antecedentes', descripcion: 'No penales', entregado: this.isDocumentoDigital(item.carta_antecedentes) }
       ],
-
-      preparacion_cuip_status: item.preparacion_cuip_status || 0
+      preparacion_cuip_status: item.preparacion_cuip_status || 0,
+      cursoCuip: item.cursoCuip,
+      autorizado: item.autorizado
     };
   }
 
   aplicarFiltro(): void {
-    const hoy = new Date();
-    const anioActual = hoy.getFullYear();
+    const busqueda = this.busquedaOrden?.trim().toLowerCase() || '';
 
-    this.cuips = this.cuips2.filter((cuip: any) => {
-      const digitalCompleto = cuip.documentosDigitales.every((d: any) => d.entregado);
-      const fisicosVigentes = cuip.estadoCuip === 'CUIP vigente';
-      const fisicosVencidos = cuip.estadoCuip === 'CUIP vencida' || cuip.estadoCuip === 'Renovación de CUIP próxima';
+    this.cuips = this.cuips2.filter(cuip => {
+      const digitalCompleto = cuip.documentosDigitales?.every(d => d.entregado) ?? false;
+      const cursoCompleto = cuip.cursoCuip === 'Completo' || cuip.cursoCuip === true;
+      const cuipRecibida = cuip.folio_cuip === 1;
+      const autorizado = cuip.preparacion_cuip_status === 1;
+      const examenPendiente = cuip.examen_cuip_status === 0;
+      const porRenovarCUIP = cuip.estadoCuip === 'Renovación de CUIP próxima';
 
-      let cuipVigentePorExamen = false;
-      if (cuip.fecha_examen_cuip) {
-        const anioExamen = new Date(cuip.fecha_examen_cuip).getFullYear();
-        cuipVigentePorExamen = anioExamen === anioActual;
-      }
-
-      // 🔹 Filtrar por tipo de filtro
       let cumpleFiltro = true;
       switch (this.filtroSeleccionado) {
-        case 'vigentes': cumpleFiltro = digitalCompleto && fisicosVigentes; break;
-        case 'vencidos': cumpleFiltro = digitalCompleto && fisicosVencidos; break;
-        case 'renovacion': cumpleFiltro = cuip.estadoCuip === 'Renovación de CUIP próxima'; break;
-        case 'primeraVez': cumpleFiltro = cuip.cuip_url == null; break;
-        case 'examenListo': cumpleFiltro = cuip.examen_cuip_status === 0 || cuip.examen_cuip_status === 1; break;
-        case 'cuipVigente': cumpleFiltro = cuipVigentePorExamen; break;
-        case 'documentosListos': cumpleFiltro = digitalCompleto; break;
         case 'documentosIncompletos': cumpleFiltro = !digitalCompleto; break;
-        case 'todos': default: cumpleFiltro = true; break;
+        case 'documentosListos': cumpleFiltro = digitalCompleto; break;
+        case 'autorizados': cumpleFiltro = autorizado; break;
+        case 'cursoCompleto': cumpleFiltro = cursoCompleto; break;
+        case 'cuipRecibida': cumpleFiltro = cuipRecibida; break;
+        case 'examenPendiente': cumpleFiltro = examenPendiente; break;
+        case 'porRenovarCUIP': cumpleFiltro = porRenovarCUIP; break;
+        default: cumpleFiltro = true; break;
       }
 
-      // 🔹 Filtrar por planta, sucursal y puesto seleccionadas
       const cumplePlanta = !this.plantaSeleccionada || cuip.planta === this.plantaSeleccionada;
       const cumpleSucursal = !this.sucursalSeleccionada || cuip.sucursal === this.sucursalSeleccionada;
       const cumplePuesto = !this.puestoSeleccionado || cuip.puesto === this.puestoSeleccionado;
+      const cumpleBusqueda = !busqueda || cuip.numerOrden?.toString().toLowerCase().includes(busqueda);
 
-      return cumpleFiltro && cumplePlanta && cumpleSucursal && cumplePuesto;
+      return cumpleFiltro && cumplePlanta && cumpleSucursal && cumplePuesto && cumpleBusqueda;
     });
-
-    // 🔹 Aplicar búsqueda si hay texto
-    if (this.busquedaOrden.trim() !== '') {
-      this.cuips = this.cuips.filter((cuip: any) =>
-        cuip.numerOrden.toString().toLowerCase().includes(this.busquedaOrden.toLowerCase().trim())
-      );
-    }
   }
 
-  isDocumentoDigital(link: string | null): boolean {
+  isDocumentoDigital(link: string | null | undefined): boolean {
     return !!link && /\.pdf$/i.test(link.trim());
   }
 
-  toggleFlip(cuip: any): void {
-    cuip.flipped = !cuip.flipped;
+  toggleFlip(cuip: Cuip): void {
+  cuip.flipped = !cuip.flipped;
+  cuip.showDocsDigitales = cuip.flipped; 
+}
+
+  /** 🔹 NUEVO: cálculo de progreso según flujo de etapas */
+  getProgresoEtapa(cuip: Cuip): { porcentaje: number, color: string } {
+    let porcentaje = 0;
+    let color = 'lightgray';
+
+    const digitalCompleto = cuip.documentosDigitales?.every(d => d.entregado) ?? false;
+
+    if (!digitalCompleto) {
+      porcentaje = 20; color = 'rgb(220,53,69)'; // Rojo
+    }
+    if (digitalCompleto) {
+      porcentaje = 40; color = 'rgb(255,165,0)'; // Naranja
+    }
+    if (cuip.preparacion_cuip_status === 1) {
+      porcentaje = 60; color = 'rgb(255,255,0)'; // Amarillo
+    }
+    if (cuip.examen_cuip === 1) {
+      porcentaje = 80; color = 'rgb(40,187,69)'; // Verde
+    }
+    if (cuip.folio_cuip === 1) {
+      porcentaje = 100; color = 'rgb(0,123,255)'; // Azul
+    }
+
+    return { porcentaje, color };
   }
 
-  getCompletion(cuip: any): number {
-    const docs: any[] = cuip.documentosDigitales || [];
-    const total = docs.length;
-    const entregados = docs.filter((d: any) => d.entregado).length;
-    return total > 0 ? (entregados / total) * 100 : 0;
+  getStrokeOffset(cuip: Cuip): number {
+    const { porcentaje } = this.getProgresoEtapa(cuip);
+    return this.circumference - (porcentaje / 100) * this.circumference;
   }
 
-  getStrokeOffset(cuip: any): number {
-    const percent = this.getCompletion(cuip);
-    return this.circumference - (percent / 100) * this.circumference;
+  getStrokeColor(cuip: Cuip): string {
+    const { color } = this.getProgresoEtapa(cuip);
+    return color;
   }
 
-  getStrokeColor(cuip: any): string {
-    const percent = this.getCompletion(cuip);
-    const r = percent < 50 ? 220 : Math.round(220 - (220 - 40) * ((percent - 50) / 50));
-    const g = percent < 50 ? Math.round(53 + (187 - 53) * (percent / 50)) : Math.round(187 + (167 - 187) * ((percent - 50) / 50));
-    return `rgb(${r},${g},69)`;
+  getEtapaTexto(cuip: Cuip): string {
+    const { porcentaje } = this.getProgresoEtapa(cuip);
+    switch (porcentaje) {
+      case 0: return 'Nada';
+      case 20: return 'Documentos incompletos';
+      case 40: return 'Expediente completo';
+      case 60: return 'Autorizados';
+      case 80: return 'Curso completo';
+      case 100: return 'CUIP recibida';
+      default: return '';
+    }
   }
 
-  hasAllRequiredDocuments(cuip: any): boolean {
+  getCompletion(cuip: Cuip): number {
+  return this.getProgresoEtapa(cuip).porcentaje;
+}
+
+  hasAllRequiredDocuments(cuip: Cuip): boolean {
     const obligatorios = [
       'INE', 'Acta de Nacimiento', 'CURP', 'Carta de Antecedentes',
       'Examen Toxicológico', 'Examen Médico', 'Comprobante Domicilio'
     ];
-    return obligatorios.every((nombreDoc: string) => {
-      const doc = cuip.documentosDigitales.find((d: any) => d.nombre === nombreDoc);
-      return doc && doc.entregado;
+    return obligatorios.every(nombreDoc => {
+      const doc = cuip.documentosDigitales.find(d => d.nombre === nombreDoc);
+      return doc?.entregado ?? false;
     });
   }
 
-  marcarPreparacionCUIP(cuip: any): void {
-    this.SharedService.actualizarPreparacionCUIP(cuip.numerOrden)
-      .subscribe({
-        next: () => {
-          cuip.preparacion_cuip_status = 1;
-          Swal.fire({
-            icon: 'success',
-            title: '¡Listo!',
-            text: `Preparación CUIP marcada para ${cuip.nombre}`,
-            timer: 2000,
-            showConfirmButton: false
-          });
-        },
-        error: () => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Ocurrió un error al actualizar la base de datos',
-          });
-        }
-      });
+  marcarPreparacionCUIP(cuip: Cuip): void {
+    const numerOrden = Number(cuip.numerOrden);
+    if (isNaN(numerOrden)) {
+      console.error('Número de orden inválido', cuip.numerOrden);
+      return;
+    }
+
+    this.SharedService.actualizarPreparacionCUIP(numerOrden).subscribe({
+      next: () => {
+        cuip.preparacion_cuip_status = 1;
+        Swal.fire({
+          icon: 'success',
+          title: '¡Listo!',
+          text: `Preparación CUIP marcada para ${cuip.nombre}`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al actualizar la base de datos',
+        });
+      }
+    });
   }
 
-  onImageError(event: any): void {
-    event.target.src = 'assets/images/avatar.jpeg';
+  onImageError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'assets/images/avatar.jpeg';
   }
 }

@@ -79,21 +79,36 @@
       </div>
     </aside>
 
-    <!-- Contenido principal: buscador + tarjetas -->
+    <!-- Contenido principal -->
     <div class="content">
 
-      <!-- Buscador arriba de las cards -->
+      <!-- Buscador -->
       <div class="buscador-container mb-3">
-  <div class="buscador-wrapper">
-    <input 
-      type="text" 
-      class="form-control buscador" 
-      placeholder="Buscar por número de orden..." 
-      [(ngModel)]="busquedaOrden"
-      (input)="aplicarFiltro()" />
-    <i class="fas fa-search search-icon"></i>
+        <div class="buscador-wrapper">
+          <input 
+            type="text" 
+            class="form-control buscador" 
+            placeholder="Buscar por número de orden..." 
+            [(ngModel)]="busquedaOrden"
+            (input)="aplicarFiltro()" />
+          <i class="fas fa-search search-icon"></i>
+        </div>
+      </div>
+
+     
+<!-- Contenedor etapas leyenda -->
+<div class="leyenda-colores-wrapper">
+  <div class="leyenda-titulo">Etapas</div>
+  <div class="leyenda-colores d-flex gap-2 flex-wrap">
+    <span *ngFor="let etapa of etapas" class="leyenda-item d-flex align-items-center gap-1">
+      <span class="color-box" [style.backgroundColor]="etapa.color"></span>
+      {{ etapa.nombre }}
+    </span>
   </div>
 </div>
+
+
+
 
       <!-- Grid de CUIPS -->
       <div class="cuips-grid">
@@ -103,7 +118,8 @@
             <!-- Lado frontal -->
             <div class="card-front card-body text-center">
               <div class="image-wrapper">
-                <svg class="progress-ring" viewBox="0 0 150 150" preserveAspectRatio="xMidYMid meet">
+                <svg class="progress-ring" viewBox="0 0 150 150" preserveAspectRatio="xMidYMid meet"
+                     [attr.title]="getEtapaTexto(cuip)">
                   <g transform="rotate(-90 75 75)">
                     <circle class="progress-ring__background" cx="75" cy="75" r="70" stroke-width="10" fill="none" />
                     <circle class="progress-ring__progress"
@@ -115,7 +131,7 @@
                     </circle>
                   </g>
                   <text x="75" y="82" text-anchor="middle" font-size="14">
-                    {{ getCompletion(cuip) | number:'1.0-0' }}%
+                    {{ getCompletion(cuip) }}%
                   </text>
                 </svg>
 
@@ -135,7 +151,7 @@
               </button>
             </div>
 
-            <!-- Lado trasero adaptado -->
+            <!-- Lado trasero -->
             <div class="card-back card-body text-center">
               <h5>Documentos de <span>{{ cuip.nombre }}</span></h5>
 
@@ -145,8 +161,9 @@
                   <i class="fa-solid fa-chevron-down" [class.rotated]="cuip.showDocsDigitales"></i>
                 </p>
 
-                <div class="table-wrapper" [style.maxHeight]="cuip.showDocsDigitales ? '250px' : '0'">
-                  <table class="table table-bordered table-striped mt-2">
+                <!-- Tabla de documentos -->
+                <div class="table-wrapper" [class.show]="cuip.showDocsDigitales">
+                  <table class="table table-striped">
                     <thead>
                       <tr>
                         <th>Documento</th>
@@ -155,24 +172,26 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let doc of cuip.documentosDigitales" 
-                          [class.falta-documento]="filtroSeleccionado === 'documentosIncompletos' && !doc.entregado">
+                      <tr *ngFor="let doc of cuip.documentosDigitales" [class.faltante]="!doc.entregado">
                         <td>{{ doc.nombre }}</td>
                         <td>{{ doc.descripcion }}</td>
-                        <td class="text-center">
-                          <input type="checkbox" [checked]="doc.entregado" disabled>
+                        <td>
+                          <span [ngClass]="{'text-success': doc.entregado, 'text-danger': !doc.entregado}">
+                            {{ doc.entregado ? 'Sí' : 'No' }}
+                          </span>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
+
               </div>
 
               <div *ngIf="hasAllRequiredDocuments(cuip) && cuip.preparacion_cuip_status !== 1" class="mt-2">
-                <button class="btn btn-success" (click)="marcarPreparacionCUIP(cuip)">
-                  Expediente Físico listo
-                </button>
-              </div>
+  <button class="btn btn-success d-flex align-items-center justify-content-center gap-2" (click)="marcarPreparacionCUIP(cuip)">
+    <i class="fas fa-check"></i> Autorizar
+  </button>
+</div>
 
               <div *ngIf="cuip.preparacion_cuip_status === 1" class="mt-2 text-success">
                 Preparación CUIP marcada ✔
